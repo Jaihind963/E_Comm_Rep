@@ -13,45 +13,42 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
- 
+  List<dynamic> users = [];
+
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       appBar: AppBar(
-        
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        
         title: Text(widget.title),
       ),
-      body: Center(
-       
-        child: Column(
-         
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              'Hello',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+      body: ListView.builder(
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          final user = users[index];
+          final email = user['email'];
+          return ListTile(
+            leading: Text('${index + 1}'),
+            title: Text(email),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        tooltip: 'Increment',
+        onPressed: userData,
         child: const Icon(Icons.add),
-      ), 
+      ),
     );
   }
-  void userData()async{
-    const url = 'https://randomuser.me/api/?results=5000';
+
+  void userData() async {
+    const url = 'https://randomuser.me/api/?results=50';
     final uri = Uri.parse(url);
-  final response= await http.get(uri);
-  final body = response.body;
-   final json=  jsonDecode(body);
+    final response = await http.get(uri);
+    final body = response.body;
+    final json = jsonDecode(body);
+
+    setState(() {
+      users = json["results"];
+    });
   }
 }
