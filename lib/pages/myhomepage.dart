@@ -1,7 +1,6 @@
-import 'dart:convert';
-
+import 'package:e_commerce_rep/services/user_api.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:e_commerce_rep/model/user.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -13,7 +12,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<dynamic> users = [];
+  List<User> users = [];
+  @override
+  void initState() {
+    super.initState();
+    userData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,29 +30,31 @@ class _MyHomePageState extends State<MyHomePage> {
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
-          final email = user['email'];
+          //  final email = user.email;
+          final phone = user.phone;
+          final color = user.gender == 'male' ? Colors.red : Colors.blue;
           return ListTile(
-            leading: Text('${index + 1}'),
-            title: Text(email),
+            leading: Text("${index + 1}"),
+            title: Text(user.fullName),
+            subtitle: Text(phone),
+            tileColor: color,
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: userData,
-        child: const Icon(Icons.add),
+        onPressed: () {
+          userData();
+        },
+        child: Icon(Icons.refresh_outlined),
       ),
     );
   }
 
-  void userData() async {
-    const url = 'https://randomuser.me/api/?results=50';
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    final body = response.body;
-    final json = jsonDecode(body);
+  Future<void> userData() async {
+    final response = await UserAPI.userData();
 
     setState(() {
-      users = json["results"];
+      users = response;
     });
   }
 }
