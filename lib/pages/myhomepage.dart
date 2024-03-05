@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           userData();
         },
-        child: Icon(Icons.refresh_outlined),
+        child: const Icon(Icons.refresh_outlined),
       ),
     );
   }
