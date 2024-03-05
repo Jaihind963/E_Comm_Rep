@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:e_commerce_rep/model/location.dart';
 import 'package:e_commerce_rep/model/user.dart';
 import 'package:e_commerce_rep/model/userdob.dart';
 import 'package:e_commerce_rep/model/username.dart';
@@ -20,6 +21,23 @@ class UserAPI {
           last: e['name']["last"]);
       final date = e['dob']['date'];
       final dob = UserDOB(date: DateTime.parse(date), age: e['dob']['age']);
+      final street = StreetCoordinate(
+          name: e['location']['street']['name'],
+          number: e['location']['street']['number']);
+      final timeZone = TimeZone(
+          offset: e['location']['timezone']['offset'],
+          description: e['location']['timezone']['description']);
+      final coordinate = Coordinates(
+          latitude: e['location']['coordinates']['latitude'],
+          longitude: e['location']['coordinates']['longitude']);
+      final location = Location(
+          city: e['location']['city'],
+          country: e['location']['country'],
+          postcode: e['location']['postcode'].toString(),
+          state: e['location']['state'],
+          street: street,
+          timeZone: timeZone,
+          coordinates: coordinate);
       return User(
           email: e["email"],
           phone: e["phone"],
@@ -27,7 +45,8 @@ class UserAPI {
           nat: e["nat"],
           gender: e["gender"],
           name: name,
-          dob: dob);
+          dob: dob,
+          location: location);
     }).toList();
     return users;
   }

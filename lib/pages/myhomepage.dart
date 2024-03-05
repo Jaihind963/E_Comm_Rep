@@ -32,12 +32,13 @@ class _MyHomePageState extends State<MyHomePage> {
           final user = users[index];
           //  final email = user.email;
           final phone = user.phone;
-          final color = user.gender == 'male' ? Colors.red : Colors.blue;
+
+//final color = user.gender == 'male' ? Colors.red : Colors.blue;
           return ListTile(
             leading: Text("${index + 1}"),
             title: Text(user.fullName),
-            subtitle: Text(phone),
-            tileColor: color,
+            subtitle: Text(user.location.country),
+            // tileColor: color,
           );
         },
       ),
